@@ -2,6 +2,7 @@
 from berserk import Client, TokenSession, Variant, Color
 from lichess import api
 from stockfish import Stockfish
+from typing import Tuple
 import threading
 
 class ChessIT_Bot():
@@ -61,9 +62,32 @@ class ChessIT_Bot():
     def handle_state_change(self, game_state):
         pass
 
+    def interpret(self, text: str) -> Tuple[bool, str, int, int, bool, float]:
+        """
+        :param text:
+        :return:
+        (bool): is a valid substring
+        (str): the substring
+        (int): lowest index of the substring in the text
+        (int): length of the substring
+        (bool): substring is a setting parameter
+        (float): The value of the setting
+        """
+        valid = False
+        substr = "noSubstring"
+        index = -1
+        length = -1
+        is_param = False
+        param_value = "noParam"
+
     def handle_chat_line(self, chat_line):
         if chat_line['username'] == self.opponent:
-            self.client.bots.post_message(self.game_id, "fuck off")
+            text : str = chat_line['text']
+            valid, substr, index, length, is_param, param_value = self.interpret(text)
+            if valid:
+                self.client.bots.post_message(self.game_id, "exciting")
+            else:
+                self.client.bots.post_message(self.game_id, "fuck off")
 
     def challenge_blitz(self, user: str):
         self.client.challenges.create(username=user,
