@@ -1,13 +1,13 @@
-# lichess access token OzWsl6WWkSIkUZEh
 from berserk import Client, TokenSession, Variant, Color
 from lichess import api
 from stockfish import Stockfish
 from typing import Tuple
 import threading
+import os
 
 class ChessIT_Bot():
     def __init__(self):
-        self.access_token = "b4ADXmZxLf4kEUOA"
+        self.access_token = os.environ.get("LICHESS_API_TOKEN")
         self.session = TokenSession(self.access_token)
         self.client = Client(self.session)
         self.game_id = ""
